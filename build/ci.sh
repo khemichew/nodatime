@@ -6,7 +6,7 @@ declare -r ROOT=$(realpath $(dirname $0)/..)
 cd $ROOT
 
 export ContinuousIntegrationBuild=true
-dotnet build -c Release src/NodaTime.sln
+dotnet build -c Release src/NodaTime/NodaTime.csproj
 dotnet test -c Release -f net8.0 src/NodaTime.Test
 # dotnet test -c Release -f net8.0 src/NodaTime.Demo
 # dotnet test -c Release -f net6.0 src/NodaTime.Test
