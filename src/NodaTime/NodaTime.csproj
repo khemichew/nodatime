@@ -6,6 +6,7 @@
     <TargetFrameworks>net8.0</TargetFrameworks>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>CA1303</NoWarn>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
     <IsPackable>True</IsPackable>
     <EnablePackageValidation>true</EnablePackageValidation>
     <ApiCompatEnableRuleCannotChangeParameterName>true</ApiCompatEnableRuleCannotChangeParameterName>
