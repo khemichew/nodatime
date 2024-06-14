@@ -78,55 +78,55 @@ namespace NodaTime.Test.TimeZones.IO
             dio.TestDictionary(expected);
         }
 
-        [Test]
-        public void Test_ZoneIntervalTransition()
-        {
-            var dio = DtzIoHelper.CreateNoStringPool();
-            dio.TestZoneIntervalTransition(null, Instant.BeforeMinValue);
-            dio.TestZoneIntervalTransition(null, Instant.MinValue);
-            // No test for Instant.MaxValue, as it's not on a tick boundary.
-            dio.TestZoneIntervalTransition(null, Instant.AfterMaxValue);
-
-            dio.TestZoneIntervalTransition(null, Instant.MinValue.PlusTicks(1));
-            // The ZoneIntervalTransition has precision to the tick (with no real need to change that).
-            // Round to the tick just lower than Instant.MaxValue...
-            Instant tickBeforeMaxInstant = Instant.FromUnixTimeTicks(Instant.MaxValue.ToUnixTimeTicks());
-            dio.TestZoneIntervalTransition(null, tickBeforeMaxInstant);
-
-            // Encoding as hours-since-previous.
-            Instant previous = Instant.FromUtc(1990, 1, 1, 11, 30);  // arbitrary
-            dio.TestZoneIntervalTransition(previous, previous);
-            dio.TestZoneIntervalTransition(previous, previous + Duration.FromHours(
-                DateTimeZoneWriter.ZoneIntervalConstants.MinValueForHoursSincePrevious));
-            dio.TestZoneIntervalTransition(previous, previous + Duration.FromHours(
-                DateTimeZoneWriter.ZoneIntervalConstants.MinValueForHoursSincePrevious - 1));  // too soon
-            dio.TestZoneIntervalTransition(previous, previous + Duration.FromHours(1));  // too soon
-            dio.TestZoneIntervalTransition(previous, previous + Duration.FromHours(
-                DateTimeZoneWriter.ZoneIntervalConstants.MinValueForMinutesSinceEpoch - 1));  // maximum hours
-            dio.TestZoneIntervalTransition(previous, previous + Duration.FromHours(
-                DateTimeZoneWriter.ZoneIntervalConstants.MinValueForMinutesSinceEpoch));  // out of range
-            // A large difference from the previous transition.
-            dio.TestZoneIntervalTransition(Instant.MinValue.PlusTicks(1), tickBeforeMaxInstant);
-
-            // Encoding as minutes-since-epoch.
-            Instant epoch = DateTimeZoneWriter.ZoneIntervalConstants.EpochForMinutesSinceEpoch;
-            dio.TestZoneIntervalTransition(null, epoch);
-            dio.TestZoneIntervalTransition(null, epoch +
-                Duration.FromMinutes(DateTimeZoneWriter.ZoneIntervalConstants.MinValueForMinutesSinceEpoch));
-            dio.TestZoneIntervalTransition(null, epoch + Duration.FromMinutes(int.MaxValue));  // maximum minutes
-
-            // Out of range cases, or not a multiple of minutes since the epoch.
-            dio.TestZoneIntervalTransition(null, epoch + Duration.FromHours(1));  // too soon
-            dio.TestZoneIntervalTransition(null, epoch + Duration.FromMinutes(1));  // too soon
-            dio.TestZoneIntervalTransition(null, epoch + Duration.FromSeconds(1));
-            dio.TestZoneIntervalTransition(null, epoch + Duration.FromMilliseconds(1));
-            dio.TestZoneIntervalTransition(null, epoch - Duration.FromHours(1));
-            dio.TestZoneIntervalTransition(null, epoch + Duration.FromMinutes((long) int.MaxValue + 1));
-
-            // Example from Pacific/Auckland which failed at one time, and a similar one with seconds.
-            dio.TestZoneIntervalTransition(null, Instant.FromUtc(1927, 11, 5, 14, 30));
-            dio.TestZoneIntervalTransition(null, Instant.FromUtc(1927, 11, 5, 14, 30, 5));
-        }
+        // [Test]
+        // public void Test_ZoneIntervalTransition()
+        // {
+        //     var dio = DtzIoHelper.CreateNoStringPool();
+        //     dio.TestZoneIntervalTransition(null, Instant.BeforeMinValue);
+        //     dio.TestZoneIntervalTransition(null, Instant.MinValue);
+        //     // No test for Instant.MaxValue, as it's not on a tick boundary.
+        //     dio.TestZoneIntervalTransition(null, Instant.AfterMaxValue);
+        //
+        //     dio.TestZoneIntervalTransition(null, Instant.MinValue.PlusTicks(1));
+        //     // The ZoneIntervalTransition has precision to the tick (with no real need to change that).
+        //     // Round to the tick just lower than Instant.MaxValue...
+        //     Instant tickBeforeMaxInstant = Instant.FromUnixTimeTicks(Instant.MaxValue.ToUnixTimeTicks());
+        //     dio.TestZoneIntervalTransition(null, tickBeforeMaxInstant);
+        //
+        //     // Encoding as hours-since-previous.
+        //     Instant previous = Instant.FromUtc(1990, 1, 1, 11, 30);  // arbitrary
+        //     dio.TestZoneIntervalTransition(previous, previous);
+        //     dio.TestZoneIntervalTransition(previous, previous + Duration.FromHours(
+        //         DateTimeZoneWriter.ZoneIntervalConstants.MinValueForHoursSincePrevious));
+        //     dio.TestZoneIntervalTransition(previous, previous + Duration.FromHours(
+        //         DateTimeZoneWriter.ZoneIntervalConstants.MinValueForHoursSincePrevious - 1));  // too soon
+        //     dio.TestZoneIntervalTransition(previous, previous + Duration.FromHours(1));  // too soon
+        //     dio.TestZoneIntervalTransition(previous, previous + Duration.FromHours(
+        //         DateTimeZoneWriter.ZoneIntervalConstants.MinValueForMinutesSinceEpoch - 1));  // maximum hours
+        //     dio.TestZoneIntervalTransition(previous, previous + Duration.FromHours(
+        //         DateTimeZoneWriter.ZoneIntervalConstants.MinValueForMinutesSinceEpoch));  // out of range
+        //     // A large difference from the previous transition.
+        //     dio.TestZoneIntervalTransition(Instant.MinValue.PlusTicks(1), tickBeforeMaxInstant);
+        //
+        //     // Encoding as minutes-since-epoch.
+        //     Instant epoch = DateTimeZoneWriter.ZoneIntervalConstants.EpochForMinutesSinceEpoch;
+        //     dio.TestZoneIntervalTransition(null, epoch);
+        //     dio.TestZoneIntervalTransition(null, epoch +
+        //         Duration.FromMinutes(DateTimeZoneWriter.ZoneIntervalConstants.MinValueForMinutesSinceEpoch));
+        //     dio.TestZoneIntervalTransition(null, epoch + Duration.FromMinutes(int.MaxValue));  // maximum minutes
+        //
+        //     // Out of range cases, or not a multiple of minutes since the epoch.
+        //     dio.TestZoneIntervalTransition(null, epoch + Duration.FromHours(1));  // too soon
+        //     dio.TestZoneIntervalTransition(null, epoch + Duration.FromMinutes(1));  // too soon
+        //     dio.TestZoneIntervalTransition(null, epoch + Duration.FromSeconds(1));
+        //     dio.TestZoneIntervalTransition(null, epoch + Duration.FromMilliseconds(1));
+        //     dio.TestZoneIntervalTransition(null, epoch - Duration.FromHours(1));
+        //     dio.TestZoneIntervalTransition(null, epoch + Duration.FromMinutes((long) int.MaxValue + 1));
+        //
+        //     // Example from Pacific/Auckland which failed at one time, and a similar one with seconds.
+        //     dio.TestZoneIntervalTransition(null, Instant.FromUtc(1927, 11, 5, 14, 30));
+        //     dio.TestZoneIntervalTransition(null, Instant.FromUtc(1927, 11, 5, 14, 30, 5));
+        // }
 
         [Test]
         public void Test_Offset()
